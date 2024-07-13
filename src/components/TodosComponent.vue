@@ -2,7 +2,12 @@
   <div>
     <TodoHeader @add-todo="addTodo" />
 
-    <TodoMain @delete-todo="deleteTodo" :taches="todos" @update-todo="updateTodo" />
+    <TodoMain
+      @delete-todo="deleteTodo"
+      :taches="todos"
+      @update-todo="updateTodo"
+      @edit-todo="editTodo"
+    />
 
     <TodoFooter :todos="todos" />
   </div>
@@ -29,9 +34,11 @@ function deleteTodo(todo: Todo): void {
   todos.value = todos.value.filter((t) => t != todo)
 }
 
-function updateTodo(todo:Todo, completedValue: boolean){
-  todo.complete = completedValue;
-  
+function updateTodo(todo: Todo, completedValue: boolean) {
+  todo.complete = completedValue
+}
+function editTodo(todo: Todo, value: string) {
+  todo.title = value
 }
 </script>
 
