@@ -9,7 +9,7 @@
       @edit-todo="editTodo"
     />
 
-    <TodoFooter :todos="todos" />
+    <TodoFooter @delete-completed="deleteCompleted" :todos="todos" />
     <!-- <pre>{{ filteredTodos }}</pre> -->
   </div>
 </template>
@@ -26,12 +26,12 @@ import { useRoute } from 'vue-router'
 
 const todos = useStorage<Todo[]>('todoapp-todos', [])
 const route = useRoute()
-const filters = computed (()=>{
+const filters = computed(() => {
   return {
-  all: todos,
-  waiting: todos.value.filter((todo) => !todo.complete),
-  completed: todos.value.filter((todo) => todo.complete)
-}
+    all: todos,
+    waiting: todos.value.filter((todo) => !todo.complete),
+    completed: todos.value.filter((todo) => todo.complete)
+  }
 })
 
 const waitingTodos = computed<Todo[]>(() => filters.value.waiting)
@@ -47,7 +47,6 @@ const filteredTodos = computed(() => {
       return todos.value
   }
 })
-
 
 function addTodo(value: string): void {
   if (value.trim().length === 0) return
@@ -70,6 +69,9 @@ function editTodo(todo: Todo, value: string) {
   if (value.trim() !== '') {
     todo.title = value
   }
+}
+function deleteCompleted() {
+  todos.value = todos.value.filter((todo) => !todo.complete)
 }
 </script>
 
