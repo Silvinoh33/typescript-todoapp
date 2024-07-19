@@ -78,8 +78,8 @@ function finishEdit() {
   editTodo()
 }
 function cancelEdit() {
-  // alert('cancel')
-  console.log('cancel')
+  
+  editing.value = false;
 }
 </script>
 
