@@ -18,12 +18,11 @@
       <label class="visual-hidden" for="edit-to-input">Editer</label>
     </div>
   </li>
-  <!-- <pre>{{ todo }}</pre> -->
 </template>
 
 <script setup lang="ts">
 import type { Todo } from '@/@types'
-import { ref, watch, computed, nextTick } from 'vue'
+import { ref, computed, nextTick } from 'vue'
 const props = defineProps<{
   todo: Todo
 }>()
@@ -34,19 +33,19 @@ const emit = defineEmits<{
   (e: 'edit-todo', todo: Todo, value: string): void
 }>()
 
-// const isChecked = computed({
-//   get: ()=> props.todo.complete,
-//   set: (newVal: boolean)=> emit('update-todo',props.todo, newVal)
-// })
+const isChecked = computed({
+  get: () => props.todo.complete,
+  set: (newVal: boolean) => emit('update-todo', props.todo, newVal)
+})
 
-const isChecked = ref<boolean>(props.todo.complete)
+// const isChecked = ref<boolean>(props.todo.complete)
 
-watch(
-  () => isChecked.value,
-  (newVal) => {
-    emit('update-todo', props.todo, newVal)
-  }
-)
+// watch(
+//   () => isChecked.value,
+//   (newVal) => {
+//     emit('update-todo', props.todo, newVal)
+//   }
+// )
 
 const editRef = ref<HTMLInputElement>()
 

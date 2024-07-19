@@ -7,10 +7,11 @@
       :taches="filteredTodos"
       @update-todo="updateTodo"
       @edit-todo="editTodo"
+      @toggle-all-input="toggleAllInput"
     />
 
     <TodoFooter @delete-completed="deleteCompleted" :todos="todos" />
-    <!-- <pre>{{ filteredTodos }}</pre> -->
+  
   </div>
 </template>
 
@@ -72,6 +73,11 @@ function editTodo(todo: Todo, value: string) {
 }
 function deleteCompleted() {
   todos.value = todos.value.filter((todo) => !todo.complete)
+}
+function toggleAllInput(value: boolean) {
+  todos.value.forEach((todo) => {
+    todo.complete = value
+  })
 }
 </script>
 
