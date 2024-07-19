@@ -23,6 +23,8 @@ import { nanoid } from 'nanoid'
 
 const todos = ref<Todo[]>([])
 function addTodo(value: string): void {
+  if (value.trim().length === 0) return
+
   todos.value.push({
     id: nanoid(),
     title: value,
@@ -38,7 +40,9 @@ function updateTodo(todo: Todo, completedValue: boolean) {
   todo.complete = completedValue
 }
 function editTodo(todo: Todo, value: string) {
-  todo.title = value
+  if (value.trim() !== '') {
+    todo.title = value
+  }
 }
 </script>
 
