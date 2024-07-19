@@ -4,12 +4,13 @@
 
     <TodoMain
       @delete-todo="deleteTodo"
-      :taches="todos"
+      :taches="filteredTodos"
       @update-todo="updateTodo"
       @edit-todo="editTodo"
     />
 
     <TodoFooter :todos="todos" />
+    <!-- <pre>{{ filteredTodos }}</pre> -->
   </div>
 </template>
 
@@ -18,12 +19,35 @@ import TodoHeader from '@/components/TodoHeader.vue'
 import TodoMain from '@/components/TodoMain.vue'
 import TodoFooter from '@/components/TodoFooter.vue'
 import type { Todo } from '@/@types'
-import { ref } from 'vue'
 import { nanoid } from 'nanoid'
 import { useStorage } from '@vueuse/core'
+import { computed } from 'vue'
+import { useRoute } from 'vue-router'
 
-// const todos = ref<Todo[]>([])
 const todos = useStorage<Todo[]>('todoapp-todos', [])
+const route = useRoute()
+const filters = computed (()=>{
+  return {
+  all: todos,
+  waiting: todos.value.filter((todo) => !todo.complete),
+  completed: todos.value.filter((todo) => todo.complete)
+}
+})
+
+const waitingTodos = computed<Todo[]>(() => filters.value.waiting)
+const completedTodos = computed<Todo[]>(() => filters.value.completed)
+
+const filteredTodos = computed(() => {
+  switch (route.name) {
+    case 'waiting':
+      return waitingTodos.value
+    case 'completed':
+      return completedTodos.value
+    default:
+      return todos.value
+  }
+})
+
 
 function addTodo(value: string): void {
   if (value.trim().length === 0) return
