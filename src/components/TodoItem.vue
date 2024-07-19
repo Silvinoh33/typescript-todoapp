@@ -7,6 +7,7 @@
     </div>
     <div class="input-container">
       <input
+        ref="editRef"
         id="edit-to-input"
         type="text"
         class="edit"
@@ -14,15 +15,15 @@
         @keyup.enter="finishEdit"
         @blur="cancelEdit"
       />
-      <label class="hidden" for="edit-to-input">Editer</label>
+      <label class="visual-hidden" for="edit-to-input">Editer</label>
     </div>
   </li>
-  <pre>{{ todo }}</pre>
+  <!-- <pre>{{ todo }}</pre> -->
 </template>
 
 <script setup lang="ts">
 import type { Todo } from '@/@types'
-import { ref, watch, computed } from 'vue'
+import { ref, watch, computed, nextTick } from 'vue'
 const props = defineProps<{
   todo: Todo
 }>()
@@ -47,6 +48,8 @@ watch(
   }
 )
 
+const editRef = ref<HTMLInputElement>()
+
 const editing = ref<boolean>(false)
 
 const editText = ref<string>('')
@@ -60,6 +63,11 @@ const editInput = computed({
 
 function startEditing() {
   editing.value = true
+  //faire un focus sur le champ de saisie
+  //rafraichir le dom avec nextTick
+  nextTick(() => {
+    editRef.value?.focus()
+  })
 }
 function editTodo() {
   emit('edit-todo', props.todo, editText.value)
@@ -71,9 +79,19 @@ function finishEdit() {
 }
 function cancelEdit() {
   // alert('cancel')
-  console.log('cancel');
-  
+  console.log('cancel')
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+.visual-hidden {
+  bottom: 0;
+  clip-path: rect(0 0 0 0);
+  height: 1px;
+  width: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  position: absolute;
+}
+</style>
