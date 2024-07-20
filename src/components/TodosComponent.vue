@@ -11,7 +11,6 @@
     />
 
     <TodoFooter @delete-completed="deleteCompleted" :todos="todos" />
-  
   </div>
 </template>
 
